@@ -1,82 +1,49 @@
 import java.util.Scanner;
 
-/*faire la validation de la date au moment de récup
-  l'input et reboucler sur la question si pas valide jusqu'a ce 
-  que ce soit valide do while
-  utiliser des variable pour définir le jour max et s'en servir pour
-  la validation
-  saisir annee, mois, jour
-  bisextile si divisible par 400 ou 4 et pas par 100
-  newJour = jour%maxJour + 1
-  new mois par défaut le meme mais si newjour == 1 alors mois += 1
-  nouvel an si mois et jour sont à 1*/
-
-
 public class exercice2{
     public static void main(String[] args){
         Scanner lecteur = new Scanner(System.in);
 
         System.out.println("Entrer une date :");
-        System.out.print("Jour :");
-        int jour = lecteur.nextInt();
-        System.out.println("");
-        System.out.print("mois :");
-        int mois = lecteur.nextInt();
-        System.out.println("");
-        System.out.print("Année :");
-        int annee = lecteur.nextInt();
-        System.out.println("");
-
-        //validation jour
-        if(jour > 31){
-            System.out.println("la date n'est pas valide");
-            System.exit(-1);
-        }
-        else if(mois < 1 || mois > 12){
-            System.out.println("la date n'est pas valide");
-            System.exit(-1);
-        }
-        else if(annee < 0){
-            System.out.println("la date n'est pas valide");
-            System.exit(-1);
-        }
-        else if(mois == 2 && annee%400 == 0 && jour > 29){
-            System.out.println("la date n'est pas valide");
-            System.exit(-1);
-        }
-        else if(mois == 2 && jour > 28){
-            System.out.println("la date n'est pas valide");
-            System.exit(-1);
-        }
-        else if((mois == 2 || mois == 4 || mois == 6 || mois == 9 || mois == 11) && jour > 31){
-            System.out.println("la date n'est pas valide");
-            System.exit(-1);
-        }
-
         
+        int jour, mois, annee;
+        int jour_max = 31;
+
+        //année
+        System.out.print("Année :");
+        annee = lecteur.nextInt();
+        System.out.println("");
+
+        boolean bisexctile = (annee%400 == 0 || annee%4 == 0) && !(annee%100 == 0);
+
+        //mois
+        do{
+            System.out.print("mois :");
+            mois = lecteur.nextInt();
+            System.out.println("");
+        }while(mois <= 0 || mois > 12);
+
+
+        //mise à jour jour_max
+        if(bisexctile && mois == 2) jour_max = 29;
+        if(!bisexctile && mois ==2) jour_max = 28;
+        if(mois == 4 || mois == 6 || mois == 9 || mois == 11) jour_max = 30;
+
+        //jour
+        do{
+            System.out.print("Jour :");
+            jour = lecteur.nextInt();
+            System.out.println("");
+        }while(jour <= 0 || jour > jour_max);
+
+        lecteur.close();
+
         //calcul lendemain
-        jour += 1;
-        if(mois == 2 && annee%400 == 0 && jour > 29){
-            jour = 1;
-            mois += 1;
-        }
-        else if(mois == 2 && jour > 28){
-            jour = 1;
-            mois += 1;
-        }
-        else if((mois == 1 || mois == 3 || mois == 5 || mois == 7 || mois == 8 || mois == 10) && jour > 31){
-            jour = 1;
-            mois += 1;
-        }
-        else if((mois == 2 || mois == 4 || mois == 6 || mois == 9 || mois == 11) && jour > 30){
-            jour = 1;
-            mois += 1;
-        }
-        else if(mois == 12 && jour > 31){
-            mois = 1;
-            jour = 1;
-            annee += 1;
-        }
+        jour = jour%jour_max + 1;
+        if(jour == 1) mois += 1;
+        if(mois > 12) mois = 1;
+        if(jour == 1 && mois == 1) annee += 1;
+        
         System.out.println("Demain nous serons le :" + jour + "/" + mois + "/" + annee);
     }
 }
