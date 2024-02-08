@@ -68,7 +68,7 @@ public class UtilTab{
         }
     }
 
-    public static void copiezone(String[] t1, Double[] t2, int deb1, int fin1, int deb2){
+    public static void copiezone(Double[] t1, Double[] t2, int deb1, int fin1, int deb2){
         deb1 = Math.max(0, deb1);
         fin1 = Math.min(t1.length - 1, fin1);
         int nbec = (fin1-deb1) - 1;
@@ -102,50 +102,93 @@ public class UtilTab{
         return tab;
     }
 
-    public static String[] fusion(String[] tab1, String[] tab2){
-        if(!(tab1 == null) && !(tab2 == null)){
-            String[] new_tab = new String[tab1.length + tab2.length - 1];
-            for(int i = 0; i < tab1.length; i++){
-                new_tab[i] = tab1[i];
-            }
-            for(int i = 0; i < tab2.length; i++){
-                new_tab[i + tab1.length - 1] = tab2[i];
-            }
-            return new_tab;
-        }
-        return new String[1];
-    }
-
     public static Double[] fusion(Double[] tab1, Double[] tab2){
-        if(!(tab1 == null) && !(tab2 == null)){
-            Double[] new_tab = new Double[tab1.length + tab2.length - 1];
-            for(int i = 0; i < tab1.length; i++){
-                new_tab[i] = tab1[i];
+        int i1=0;
+        int i2=0;
+        int i=0;
+        double[] res = new double[tab.length+tab2.length];
+        while(i1<tab1.length && i2 < tab2.length){
+            if(tab1[i1] < tab2[i2]){;
+                res[i] = tab1[i1];
+                i1++;
+            } else{
+                res[i] = tab2[i2];
+                i2++;
             }
-            for(int i = 0; i < tab2.length; i++){
-                new_tab[i + tab1.length - 1] = tab2[i];
-            }
-            return new_tab;
+            i++;
         }
-        return new Double[1];
-    }
+        if(i1 < tab1.length){
+            copieZone(tab1, res, i1, tab1.length - 1, i);
+        } else{
+            copieZone(tab2, res, i2, tab2.length - 1, i);
+        }
+        return res;
+    }      
 
     //@tab != null
     public static void inserer(String[] tab, int indice, String element){
         indice = Math.max(0, indice);
-        indice = min(tab.length - 1, indice);
+        indice = Math.min(tab.length - 1, indice);
         tab[indice] = element;
     }
 
-
-    public static void main(String[] args){
-        String[] tab1 = {"a","b","c","d"};
-        afficheStringTab(tab1);
-        String[] tab2 = {"d","c","b","a"};
-        afficheStringTab(tab2);
-        String[] tab = copieString(tab1, tab2, 0, 3, 0);
-        afficheStringTab(tab);
+    public static void inserer(Double[] tab, int indice, Double element){
+        indice = Math.max(0, indice);
+        indice = Math.min(tab.length - 1, indice);
+        tab[indice] = element;
     }
 
+    public static void suppr_reduit(String[] tab, int nombre_element){
+        String[] new_tab = new String[tab.length - nombre_element];
+        for(int i = 0; i < new_tab.length; i++){
+            new_tab[i] = tab[i];
+        }
+        tab = new_tab;
+    }    
 
+    public static void suppr_reduit(Double[] tab, int nombre_element){
+        Double[] new_tab = new Double[tab.length - nombre_element];
+        for(int i = 0; i < new_tab.length; i++){
+            new_tab[i] = tab[i];
+        }
+        tab = new_tab;
+    }
+
+    public static void suppr_element(String[] tab, String element){
+        String[] new_tab = new String[tab.length - 1];
+        for(int i = 0; i < new_tab.length; i++){
+            if(!(tab[i] == element)){
+                new_tab[i] = tab[i];
+            }
+        }
+        tab = new_tab;
+    }
+   
+    public static void suppr_element(Double[] tab, Double element){
+        Double[] new_tab = new Double[tab.length - 1];
+        for(int i = 0; i < new_tab.length; i++){
+            if(!(tab[i] == element)){
+                new_tab[i] = tab[i];
+            }
+        }
+        tab = new_tab;
+    }
+    
+    public static Double[] tri_fusion(Double[] tab){
+        if(tab.length == 1){
+            return tab;
+        }
+        int milieu = tab.length/2;
+        double[] tab_left = new double[middle];
+        double[] tab_right = new double[tab.length - middle];
+        copieZone(tab, tab_left, 0, middle-1, 0);
+        copieZone(tab, tab_right, middle, tab.length - 1, 0);
+        return fusion(tri_fusion(tab_left), tri_fusion(tab_right));
+    }
+
+    public static void main(String[] args){
+        Double[] tab1 = {1,2,3,4,5};
+        Double[] tab2 = {5,1,4};
+        affiche(tab1);
+    }
 }
